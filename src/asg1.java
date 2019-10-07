@@ -1,24 +1,56 @@
 public class asg1 {
 
   public static void main(String[] args) {
+
+    /**
+     * mod(pow(a,j), n)
+     * pow(a , j) % n
+     * a to the j mod n
+     *
+     * Remember that mod has less precedence than + and -
+     *
+     * a%n + ( a >= 0 ? 0 : n )
+     */
+
     long a = Long.parseLong(args[0]);
     long j = Long.parseLong(args[1]);
     long n = Long.parseLong(args[2]);
 
-//    System.out.println("Expected: " + mod(a, j));
-//    System.out.println("Actual: " + mod(a, j));
-    System.out.println(mod(pow(a, j), n));
+    // we can use the powers lecture that we had to come up with a cleaner answer.
+
+    System.out.println(breaker(a, j, n));
+
   }
 
-  // Much faster but still getting some problems with the incorrect answers :/ Think it might be a mod problem though
-  private static long mod(long number, long divisor) {
-    if (number < divisor) {
-      return number;
-    } else {
-      long howManyTimes = number / divisor;
-      return number - (howManyTimes * divisor);
-    }
+  /**
+   * We can use the divide and conquer method that he taught us in the lectures
+   */
+  private static long breaker(long a, long j, long n) {
+    // Base cases
+    if( a == 0)
+      return 0;
+    if (j == 0)
+      return 1;
+
+    long result;
+
+    if (j % 2 == 0)
+      result = (breaker(a, j/2, n) * breaker(a, j/2, n)) % n;
+    else
+      result = ((a % n) * breaker(a, j - 1, n)) % n;
+
+    return (result + n) % n;
   }
+
+//  // Much faster but still getting some problems with the incorrect answers :/ Think it might be a pow problem though
+//  private static long mod(long number, long divisor) {
+//    if (number < divisor) {
+//      return number;
+//    } else {
+//      long howManyTimes = number / divisor;
+//      return number - (howManyTimes * divisor);
+//    }
+//  }
 
 // program times out, need to think of a more efficient way of doing it
 //  private static long mod(long number, long divisor) {
@@ -31,20 +63,20 @@ public class asg1 {
 //    }
 //    return number;
 //  }
-
-  // Runs quicker for the last few with the performance tuning but it still gives the wrong outcome for some reason :(
-  // is it an overflow error? I am getting negative values...
-  private static long pow(long base, long power) {
-    if (power == 0) {
-      return 1;
-    } else if (power == 1) {
-      return base;
-    } else if (power % 2 == 0) {
-      return pow(base * base, power / 2);
-    } else {
-      return base * pow(base * base, power / 2);
-    }
-  }
+//
+//  // Runs quicker for the last few with the performance tuning but it still gives the wrong outcome for some reason :(
+//  // is it an overflow error? I am getting negative values...
+//  private static long pow(long base, long power) {
+//    if (power == 0) {
+//      return 1;
+//    } else if (power == 1) {
+//      return base;
+//    } else if (mod(power, 2) == 0) {
+//      return pow(base * base, power / 2);
+//    } else {
+//      return base * pow(base * base, power / 2);
+//    }
+//  }
 
 // Fails the third question and times out on the rest of them
 //  private static long pow(long base, long power) {
@@ -55,7 +87,7 @@ public class asg1 {
 //    return result;
 //  }
 
-// Stack Overflow Error with large values, need to come up with a better way that uses less of the stack, for loop?
+// Stack overflow error with large values, need to come up with a better way that uses less of the stack, for loop?
 //  private static long pow(long base, long power) {
 //    if (power == 1) {
 //      return base;
