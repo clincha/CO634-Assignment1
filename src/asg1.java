@@ -27,19 +27,22 @@ public class asg1 {
    */
   private static long breaker(long a, long j, long n) {
     // Base cases
-    if( a == 0)
-      return 0;
-    if (j == 0)
+    if (j < 1)
       return 1;
 
     long result;
 
-    if (j % 2 == 0)
-      result = (breaker(a, j/2, n) * breaker(a, j/2, n)) % n;
-    else
-      result = ((a % n) * breaker(a, j - 1, n)) % n;
-
-    return (result + n) % n;
+    if (j % 2 == 0) {
+      // We can use theorem 2 here to break up the question a bit
+      long intermediate = breaker(a, j / 2L, n);
+      // Needed to calculate the intermediate first otherwise there are performance problems
+      result = (intermediate * intermediate) % n;
+      return result;
+    } else {
+      long intermediate = breaker(a, j / 2L, n);
+      result = (intermediate * intermediate) % n;
+      return (a * result) % n;
+    }
   }
 
 //  // Much faster but still getting some problems with the incorrect answers :/ Think it might be a pow problem though
