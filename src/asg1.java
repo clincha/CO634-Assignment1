@@ -32,15 +32,14 @@ public class asg1 {
 
     long result;
 
+    // We can use theorem 2 here to break up the question a bit
+    long intermediate = breaker(a, j / 2L, n);
+    // Needed to calculate the intermediate first otherwise there are performance problems
+    result = (intermediate * intermediate) % n;
+
     if (j % 2 == 0) {
-      // We can use theorem 2 here to break up the question a bit
-      long intermediate = breaker(a, j / 2L, n);
-      // Needed to calculate the intermediate first otherwise there are performance problems
-      result = (intermediate * intermediate) % n;
       return result;
     } else {
-      long intermediate = breaker(a, j / 2L, n);
-      result = (intermediate * intermediate) % n;
       return (a * result) % n;
     }
   }
